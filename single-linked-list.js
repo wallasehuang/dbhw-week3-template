@@ -11,32 +11,88 @@ function SinglyLinkedList() {
 
 SinglyLinkedList.prototype.add = function(data) {
   var node = new Node(data);
-  if(!this.head) {
-    //TODO
+  if (!this.head) {
+    this.head = node;
+    this.tail = node;
   } else {
-    //TODO
+    this.tail.next = node;
+    this.tail = node;
   }
-
+  this.numberOfValues++;
 };
 
 SinglyLinkedList.prototype.remove = function(data) {
   var previous = this.head;
   var current = this.head;
-  //TODO
+  var flag = false;
+
+  while (current) {
+    if (current.data == data) {
+      flag = true;
+      if (current == this.head) {
+        this.head = current.next;
+        current = this.head;
+      } else if (current == this.tail) {
+        this.tail = previous;
+      } else {
+        previous.next = current.next;
+        current = current.next;
+      }
+      this.numberOfValues--;
+    }
+    previous = current;
+    current = current.next;
+  }
+  if (!flag) {
+    console.log("non existing value");
+  }
 };
 
 SinglyLinkedList.prototype.insertAfter = function(data, toNodeData) {
   var current = this.head;
-  //TODO
-};
+    //TODO
+    //若data和toNodeData相同，會導致無窮迴圈
+    if (data != toNodeData) {
+      flag = false;
+      while (current) {
+        if (current.data == toNodeData) {
+          flag = true;
+          var node = new Node(data);
+          if (current == this.tail) {
+            current.next = node;
+            this.tail = node;
+          } else {
+            node.next = current.next;
+            current.next = node;
+          }
+          this.numberOfValues++;
+        }
+        current = current.next;
+      }
+      if (!flag) {
+        console.log("non existing value");
+      }
+    } else {
+      console.log("data和toNodeData不能相同");
+    }
 
-SinglyLinkedList.prototype.length = function() {
-  //TODO
-};
+  };
 
-SinglyLinkedList.prototype.print = function() {
-  //TODO
-};
+  SinglyLinkedList.prototype.length = function() {
+    //TODO
+    return this.numberOfValues;
+  };
+
+  SinglyLinkedList.prototype.print = function() {
+    //TODO
+    var s = "";
+    var current = this.head;
+    while (current) {
+      s += current.data + " ";
+      current = current.next;
+    }
+    return s.trim();
+  };
 
 
 /*
@@ -76,6 +132,6 @@ console.log('length is 7:', singlyLinkedList.length()); // => 7
 
 
 module.exports = {
-  SinglyLinkedList : SinglyLinkedList,
-  Node : Node
+  SinglyLinkedList: SinglyLinkedList,
+  Node: Node
 };
